@@ -10,14 +10,14 @@ spring:
           uri: http://localhost:8080
           predicates:
             - Path=/games/**
-            - filters:
-                - AuthenticationFilter
+          filters:
+            - AuthenticationFilter
   endpoints:
     web:
       exposure:
         include: "*"
   endpoint:
-    healt:
+    health:
       show-details: always
     gateway:
       enabled: true
