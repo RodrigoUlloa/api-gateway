@@ -4,7 +4,7 @@ import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
@@ -28,12 +28,13 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             var request = exchange.getRequest();
 
             ServerHttpRequest serverHttpRequest = null;
-            if (validator.isSecured.test((ServerHttpRequest) request)) {
+            if (validator.isSecured.test((org.springframework.http.server.reactive.ServerHttpRequest) request)) {
                 if (authMissing(request)) {
                     return onError(exchange, HttpStatus.UNAUTHORIZED);
                 }
 
                 String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
+
                 if (authHeader != null && authHeader.startsWith("Bearer ")) {
                     authHeader = authHeader.substring(7);
                 } else {
